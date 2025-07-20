@@ -578,4 +578,432 @@
         });
     </script>
 </body>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla Curricular - Licenciatura en Turismo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+
+        .stats-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-width: 180px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .modules-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .module-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 400px;
+        }
+
+        .module-title {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .ingles-title {
+            background: #006064;
+        }
+
+        .computacion-title {
+            background: #6A1B9A;
+        }
+
+        .subjects-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .subject-card {
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subject-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .subject-icon {
+            font-size: 1.5rem;
+        }
+
+        .subject-details h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .subject-credits {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 2px;
+        }
+
+        .subject-status {
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .subject-card.completed {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #d5f4e6 0%, #a8e6cf 100%);
+        }
+
+        .subject-card.completed .subject-status::before {
+            content: "✅";
+        }
+
+        .subject-card.blocked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f8f9fa;
+        }
+
+        .subject-card.blocked:hover {
+            transform: none;
+        }
+
+        .subject-card.available {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .subject-card.available:hover {
+            border-color: #2980b9;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 1000;
+            display: none;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #2c3e50 transparent transparent transparent;
+        }
+
+        .subject-card.blocked:hover .tooltip {
+            display: block;
+        }
+
+        /* Colores específicos para materias de Inglés */
+        .ingles-A1-pre { background: #E0F7FA; }
+        .ingles-A1 { background: #B2EBF2; }
+        .ingles-A2 { background: #80DEEA; }
+        .ingles-B1 { background: #4DD0E1; }
+        .ingles-B2 { background: #26C6DA; }
+        .ingles-C1 { background: #00BCD4; }
+        .ingles-C2 { background: #0097A7; }
+
+        /* Colores específicos para materias de Computación */
+        .comp-windows { background: #F3E5F5; }
+        .comp-excel { background: #E1BEE7; }
+
+        @media (max-width: 768px) {
+            .modules-container {
+                flex-direction: column;
+            }
+            
+            .module-section {
+                min-width: auto;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-section {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 LICENCIATURA EN TURISMO</h1>
+            <p>Malla Curricular Interactiva - Módulos de Inglés y Computación</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="completed-modules">0</div>
+                <div class="stat-label">Módulos Aprobados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-modules">9</div>
+                <div class="stat-label">Total de Módulos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="earned-credits">0</div>
+                <div class="stat-label">Créditos Obtenidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="total-credits">30.56</div>
+                <div class="stat-label">Total de Créditos</div>
+            </div>
+        </div>
+
+        <div class="modules-container">
+            <div class="module-section">
+                <div class="module-title ingles-title">
+                    📘 MÓDULO: INGLÉS
+                </div>
+                <div class="subjects-grid" id="ingles-subjects"></div>
+            </div>
+
+            <div class="module-section">
+                <div class="module-title computacion-title">
+                    💻 MÓDULO: COMPUTACIÓN
+                </div>
+                <div class="subjects-grid" id="computacion-subjects"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de las materias
+        const subjects = {
+            ingles: [
+                { id: 'ingles-A1-pre', name: '-A1', credits: 2.08, icon: '🔴🏆', prerequisites: [], class: 'ingles-A1-pre' },
+                { id: 'ingles-A1', name: 'A1', credits: 2.08, icon: '🟠🏆', prerequisites: ['ingles-A1-pre'], class: 'ingles-A1' },
+                { id: 'ingles-A2', name: 'A2', credits: 2.08, icon: '🟡🏆', prerequisites: ['ingles-A1'], class: 'ingles-A2' },
+                { id: 'ingles-B1', name: 'B1', credits: 2.08, icon: '🟢🏆', prerequisites: ['ingles-A2'], class: 'ingles-B1' },
+                { id: 'ingles-B2', name: 'B2', credits: 2.08, icon: '🔵🏆', prerequisites: ['ingles-B1'], class: 'ingles-B2' },
+                { id: 'ingles-C1', name: 'C1', credits: 2.08, icon: '🟣🏆', prerequisites: ['ingles-B2'], class: 'ingles-C1' },
+                { id: 'ingles-C2', name: 'C2', credits: 2.08, icon: '🟤🏆', prerequisites: ['ingles-C1'], class: 'ingles-C2' }
+            ],
+            computacion: [
+                { id: 'comp-windows', name: 'Windows - Word - Internet', credits: 8, icon: '🪟📄🌐', prerequisites: [], class: 'comp-windows' },
+                { id: 'comp-excel', name: 'Excel - PowerPoint', credits: 8, icon: '📊📽️', prerequisites: ['comp-windows'], class: 'comp-excel' }
+            ]
+        };
+
+        // Estado de las materias (usando variables JavaScript en lugar de localStorage)
+        let completedSubjects = new Set();
+
+        // Función para verificar si una materia está disponible
+        function isSubjectAvailable(subject) {
+            if (completedSubjects.has(subject.id)) return 'completed';
+            
+            for (let prereq of subject.prerequisites) {
+                if (!completedSubjects.has(prereq)) {
+                    return 'blocked';
+                }
+            }
+            return 'available';
+        }
+
+        // Función para obtener prerrequisitos faltantes
+        function getMissingPrerequisites(subject) {
+            const missing = [];
+            for (let prereq of subject.prerequisites) {
+                if (!completedSubjects.has(prereq)) {
+                    const prereqSubject = [...subjects.ingles, ...subjects.computacion].find(s => s.id === prereq);
+                    if (prereqSubject) {
+                        missing.push(prereqSubject.name);
+                    }
+                }
+            }
+            return missing;
+        }
+
+        // Función para actualizar estadísticas
+        function updateStats() {
+            const completedCount = completedSubjects.size;
+            const totalSubjects = subjects.ingles.length + subjects.computacion.length;
+            
+            let earnedCredits = 0;
+            for (let subjectId of completedSubjects) {
+                const subject = [...subjects.ingles, ...subjects.computacion].find(s => s.id === subjectId);
+                if (subject) earnedCredits += subject.credits;
+            }
+
+            document.getElementById('completed-modules').textContent = completedCount;
+            document.getElementById('earned-credits').textContent = earnedCredits.toFixed(2);
+        }
+
+        // Función para crear una tarjeta de materia
+        function createSubjectCard(subject) {
+            const status = isSubjectAvailable(subject);
+            const card = document.createElement('div');
+            card.className = `subject-card ${status} ${subject.class}`;
+            card.onclick = () => toggleSubject(subject.id);
+
+            const missingPrereqs = getMissingPrerequisites(subject);
+            
+            card.innerHTML = `
+                <div class="subject-info">
+                    <span class="subject-icon">${subject.icon}</span>
+                    <div class="subject-details">
+                        <h3>${subject.name}</h3>
+                        <div class="subject-credits">Créditos: ${subject.credits}</div>
+                    </div>
+                </div>
+                <div class="subject-status"></div>
+                ${status === 'blocked' && missingPrereqs.length > 0 ? 
+                    `<div class="tooltip">Requiere: ${missingPrereqs.join(', ')}</div>` : ''}
+            `;
+
+            return card;
+        }
+
+        // Función para alternar el estado de una materia
+        function toggleSubject(subjectId) {
+            const status = isSubjectAvailable([...subjects.ingles, ...subjects.computacion].find(s => s.id === subjectId));
+            
+            if (status === 'blocked') return;
+
+            if (completedSubjects.has(subjectId)) {
+                completedSubjects.delete(subjectId);
+            } else {
+                completedSubjects.add(subjectId);
+            }
+
+            renderSubjects();
+            updateStats();
+        }
+
+        // Función para renderizar todas las materias
+        function renderSubjects() {
+            const inglesContainer = document.getElementById('ingles-subjects');
+            const computacionContainer = document.getElementById('computacion-subjects');
+
+            inglesContainer.innerHTML = '';
+            computacionContainer.innerHTML = '';
+
+            subjects.ingles.forEach(subject => {
+                inglesContainer.appendChild(createSubjectCard(subject));
+            });
+
+            subjects.computacion.forEach(subject => {
+                computacionContainer.appendChild(createSubjectCard(subject));
+            });
+        }
+
+        // Inicializar la aplicación
+        function init() {
+            renderSubjects();
+            updateStats();
+        }
+
+        // Ejecutar cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
 </html>
