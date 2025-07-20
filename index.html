@@ -1,807 +1,743 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Malla Curricular - Licenciatura en Turismo</title>
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
-<style>
-  body {
-    background: linear-gradient(135deg, #F7F7F7 0%, #ECECEC 100%);
-    font-family: 'Montserrat', Arial, sans-serif;
-    margin: 0;
-    color: #242424;
-  }
-  .header {
-    background: linear-gradient(90deg, #4DC4ED 60%, #E0F7FA 100%);
-    color: #046184;
-    text-align: center;
-    padding: 2rem 0 1.2rem;
-    letter-spacing: 2px;
-    border-bottom: 3px solid #80DEEA;
-  }
-  .header h1 {
-    font-size: 2.2rem;
-    margin-bottom: 0.3rem;
-    letter-spacing:2px;
-  }
-  .header h2 {
-    font-size: 1.15rem;
-    font-weight: 400;
-    opacity: 0.8;
-    margin-bottom: 0.5rem;
-  }
-  .stats {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    background: #E0F7FA;
-    padding: .8rem 0;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #B2EBF2;
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-  .container {
-    width: 98vw;
-    overflow-x: auto;
-    padding: 0 5vw 4rem 5vw;
-    box-sizing: border-box;
-  }
-  .unit {
-    margin: 2.5rem 0 3rem 0;
-  }
-  .unit-title {
-    font-size: 1.3rem;
-    margin-bottom: .3em;
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    border-left: 7px solid #1AB4E8;
-    padding-left: .7em;
-    display: inline-block;
-    background: #f6fafd;
-  }
-  .unit-title[data-color="basica"] { border-left-color: #4DD78B; background: #effcf3;}
-  .unit-title[data-color="prof"] { border-left-color: #FFD150; background: #FFFBE7;}
-  .unit-title[data-color="titu"] { border-left-color: #FF9292; background: #fff1f1;}
-  .unit-sems {
-    display: flex;
-    gap: 1.2rem;
-    justify-content: center;
-    margin: 1.5rem 0 0 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-  .sem-col {
-    min-width: 220px;
-    background: #eaf9fc;
-    padding: 1.2rem 1rem 1.3rem 1rem;
-    border-radius: 16px;
-    box-shadow: 0 2px 10px #8ecae61c;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .sem-title {
-    font-size: 1.15rem;
-    font-weight: bold;
-    margin-bottom: 0.8rem;
-    letter-spacing: 1px;
-    text-align: center;
-    border-left: 4px solid #008BA3;
-    padding-left: .4em;
-  }
-  /* Colores personalizables por semestre */
-  .sem-col[data-sem="pre"]{background:#E0F7FA;}
-  .sem-col[data-sem="1"]{background:#E8F5E9;}
-  .sem-col[data-sem="2"]{background:#FFF3E0;}
-  .sem-col[data-sem="3"]{background:#F3E5F5;}
-  .sem-col[data-sem="4"]{background:#FCE4EC;}
-  .sem-col[data-sem="5"]{background:#FFFDE7;}
-  .sem-col[data-sem="6"]{background:#FFEBEE;}
-  .sem-col[data-sem="7"]{background:#E8F5E9;}
-  .sem-col[data-sem="8"]{background:#E3F2FD;}
-  .sem-col[data-sem="9"]{background:#FAFAFA;}
-  .sem-title[data-sem="pre"]{color:#008BA3;}
-  .sem-title[data-sem="1"]{color:#1B5E20;}
-  .sem-title[data-sem="2"]{color:#EF6C00;}
-  .sem-title[data-sem="3"]{color:#6A1B9A;}
-  .sem-title[data-sem="4"]{color:#AD1457;}
-  .sem-title[data-sem="5"]{color:#FBC02D;}
-  .sem-title[data-sem="6"]{color:#C62828;}
-  .sem-title[data-sem="7"]{color:#1B5E20;}
-  .sem-title[data-sem="8"]{color:#0D47A1;}
-  .sem-title[data-sem="9"]{color:#424242;}
-  .subjects {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.6rem;
-  }
-  .subject-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 0.85rem 0.9rem 0.7rem 0.9rem;
-    font-size: 1rem;
-    margin: 0 auto;
-    font-weight: 500;
-    box-shadow: 0 2px 4px #b8d8ed0e;
-    display: flex;
-    align-items: center;
-    gap: 0.6em;
-    opacity: 1;
-    cursor: pointer;
-    transition: background 0.15s, outline 0.2s;
-    border: 2px solid transparent;
-    position: relative;
-    min-width: 0;
-  }
-  .subject-card.approved {
-    background: #c7eae0;
-    text-decoration: line-through;
-    color: #373f47ab;
-    opacity: 0.67;
-  }
-  .subject-card.locked {
-    cursor: default;
-    background: #E0E0E0 !important;
-    color: #929494;
-    border: 2px dashed #bababa;
-    opacity: 0.74;
-    text-decoration: none;
-  }
-  .subject-icon {
-    font-size: 1.1em;
-    width: 1.5em;
-    text-align: center;
-    flex-shrink: 0;
-  }
-  .subject-label {
-    flex:1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space:nowrap;
-  }
+  <meta charset="UTF-8">
+  <title>Licenciatura en Turismo - Malla Curricular</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Fuentes agradables -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-neutral1: #F7F7F7;
+      --bg-neutral2: #ECECEC;
+      --bg-neutral3: #E0E0E0;
+      --bg-neutral4: #D4D4D4;
+      --txt-dark: #313131;
 
-  .subject-credit {
-    font-size: 0.92em;
-    color: #169ec3;
-    margin-left: .4em;
-    font-weight: 600;
-  }
-  .subject-card.locked .subject-credit {color: #bababa;}
-  .subject-card .subject-check {
-    font-size: 1.12em;
-    color: #00b36c;
-    display: none;
-  }
-  .subject-card.approved .subject-check {
-    display: inline;
-  }
-  .subject-card.locked .subject-check {
-    display: none;
-  }
+      /* Paletas UNIDADES */
+      --pre-bg: #E1F3FB;
+      --pre-color: #008BA3;
+      --bas-bg: #E6F9E8;
+      --bas-color: #1B5E20;
+      --prof-bg: #FFFBEB;
+      --prof-color: #FFB300;
+      --tit-bg: #FFEAEA;
+      --tit-color: #E53935;
 
-  .subject-card[data-tooltip]:hover:after,
-  .subject-card[data-tooltip]:focus:after{
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #333a;
-    color: #fff;
-    font-size: 0.96em;
-    border-radius:6px;
-    padding:.4em .8em;
-    white-space:pre-line;
-    min-width:125px;
-    z-index: 3;
-    pointer-events: none;
-    filter:drop-shadow(2px 7px 5px #0002)
-  }
-  /* Módulos */
-  .modules-section {
-    margin: 2.5rem 0 2.5rem 0;
-    background: #EFEFEF;
-    padding: 2rem 1vw;
-    border-radius: 20px;
-    box-shadow: 0 3px 12px #c0c9ce0d;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width:1050px;
-    margin-left:auto;margin-right:auto;
-  }
-  .modules-title {
-    font-size: 1.25rem;
-    margin-bottom:1.3rem;
-    font-weight: bolder;
-    color: #2b5c7d;
-    background: #eaf6fa;
-    padding:.4em 1.2em;
-    border-left: 7px solid #006064;
-    border-radius: 5px 0 0 5px;
-  }
-  .modules-container {
-    width:100%;
-    display: flex;
-    justify-content: center;
-    gap: 2.3rem;
-    margin: .4rem .3rem 0 .3rem;
-    flex-wrap:wrap;
-  }
-  .module-box {
-    padding: 1.3em 0.7em;
-    border-radius: 13px;
-    min-width:220px;
-    background:#E5E5E5;
-    box-shadow: 0 2px 6px #cacaca25;
-    text-align: center;
-    transition: box-shadow 0.19s;
-    margin-bottom: 1.8em;
-  }
-  .module-box[data-mod="ing"]{background: #E0F7FA;}
-  .module-box[data-mod="comp"]{background: #F3E5F5;}
-  .module-title {
-    font-size:1.1em;
-    font-weight:bolder;
-    margin-bottom: .7em;
-    color:#006064;
-    letter-spacing:1.3px;
-  }
-  .module-title[data-mod="comp"]{color: #6A1B9A;}
-  .module-list {
-    display: flex;
-    flex-direction: column;
-    gap: .65em;
-  }
-  .module-card {
-    background: #fff;
-    border-radius: 8px;
-    font-size: 1em;
-    margin-bottom:.15em;
-    display: flex;
-    align-items: center;
-    gap: .7em;
-    padding: .75em 1em;
-    box-shadow:0 2px 7px #e4e4e44e;
-    cursor: pointer;
-    font-weight: 500;
-    border:2px solid transparent;
-    position: relative;
-  }
-  .module-card.approved {
-    background: #d6f5ec;
-    color: #4d6363;
-    text-decoration: line-through;
-    opacity:0.68;
-  }
-  .module-card.locked {
-    background: #DCDCDC;
-    color: #a0a0a0;
-    cursor: default;
-    border:2px dashed #aeaeae;
-    text-decoration:none;
-    opacity:0.81
-  }
-  .module-card.locked .mod-check {display:none;}
-  .mod-icon{font-size:1.1em}
-  .mod-label{flex:1}
-  .mod-credit{
-    font-size:.92em;
-    color:#009688;
-    font-weight:600;
-    margin-left:.23em;
-    letter-spacing:.5px;
-  }
-  .module-card.approved .mod-label{color:#278052}
-  .module-card .mod-check {
-    font-size: 1.1em;
-    color:#009688;
-    margin-left: .5em;
-    display:none;
-  }
-  .module-card.approved .mod-check{display:inline;}
-  .module-card[data-tooltip]:hover:after,
-  .module-card[data-tooltip]:focus:after{
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 100%;
-    top: 55%;
-    transform: translateY(-50%);
-    background: #2c2c2ca8;
-    color: #fff;
-    font-size: 0.99em;
-    border-radius:7px;
-    padding:.3em .7em;
-    white-space:pre-line;
-    min-width:145px;
-    z-index:10;
-    filter:drop-shadow(2px 7px 5px #0002)
-  }
-  /* Responsive */
-  @media (max-width: 900px){
-    .unit-sems,.modules-container { flex-wrap:wrap;}
-    .sem-col,.module-box{min-width:180px;max-width:100%;}
-  }
-  @media (max-width:700px){
-    .container{padding:0 1vw;}
-    .module-box,.sem-col{min-width:98vw;}
-    body{font-size:93%;}
-    .unit-title{font-size:1.1rem}
-  }
-</style>
+      /* Paletas SEMESTRES */
+      --pre-1: #E0F7FA; --pre-2: #B2EBF2; --pre-3: #80DEEA; --pre-4: #4DD0E1; --pre-5: #26C6DA; --pre-6: #00BCD4;
+      --sem-1-1: #E8F5E9; --sem-1-2: #C8E6C9; --sem-1-3: #A5D6A7; --sem-1-4: #81C784; --sem-1-5: #66BB6A; --sem-1-6: #43A047;
+      --sem-2-1: #FFF3E0; --sem-2-2: #FFE0B2; --sem-2-3: #FFCC80; --sem-2-4: #FFB74D; --sem-2-5: #FFA726; --sem-2-6: #FF9800;
+      --sem-3-1: #F3E5F5; --sem-3-2: #E1BEE7; --sem-3-3: #CE93D8; --sem-3-4: #BA68C8; --sem-3-5: #AB47BC; --sem-3-6: #9C27B0;
+      --sem-4-1: #FCE4EC; --sem-4-2: #F8BBD0; --sem-4-3: #F48FB1; --sem-4-4: #F06292; --sem-4-5: #EC407A; --sem-4-6: #E91E63;
+      --sem-5-1: #FFFDE7; --sem-5-2: #FFF9C4; --sem-5-3: #FFF59D; --sem-5-4: #FFF176; --sem-5-5: #FFEE58; --sem-5-6: #FFEB3B;
+      --sem-6-1: #FFEBEE; --sem-6-2: #FFCDD2; --sem-6-3: #EF9A9A; --sem-6-4: #E57373; --sem-6-5: #EF5350; --sem-6-6: #F44336;
+      --sem-7-1: #E8F5E9; --sem-7-2: #C8E6C9; --sem-7-3: #A5D6A7; --sem-7-4: #81C784; --sem-7-5: #66BB6A; --sem-7-6: #388E3C;
+      --sem-8-1: #E3F2FD; --sem-8-2: #BBDEFB; --sem-8-3: #90CAF9; --sem-8-4: #64B5F6; --sem-8-5: #42A5F5; --sem-8-6: #1976D2;
+      --sem-9-1: #FAFAFA; --sem-9-2: #F5F5F5; --sem-9-3: #EEEEEE; --sem-9-4: #E0E0E0; --sem-9-5: #BDBDBD; --sem-9-6: #757575;
+
+      --mod-bg1: #F7F7F7;
+      --mod-bg2: #EFEFEF;
+      --mod-bg3: #E5E5E5;
+
+      /* Modulo INGLÉS */
+      --eng-1: #E0F7FA; --eng-2: #B2EBF2; --eng-3: #80DEEA; --eng-4: #4DD0E1; --eng-5: #26C6DA; --eng-6: #00BCD4; --eng-7: #0097A7; --eng-title: #006064;
+      /* Módulo COMPUTACIÓN */
+      --comp-1: #F3E5F5; --comp-2: #E1BEE7; --comp-3: #CE93D8; --comp-title: #6A1B9A;
+    }
+
+    html, body {
+      background: var(--bg-neutral1);
+      font-family: 'Nunito', Arial, sans-serif;
+      color: var(--txt-dark);
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em 1em 1em 1em;
+      background: linear-gradient(135deg, var(--pre-bg) 15%, var(--tit-bg) 100%);
+    }
+
+    header h1 {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 2.2em;
+      margin-bottom: 0.1em;
+      font-weight: bold;
+      color: var(--pre-color);
+      letter-spacing: 1px;
+      text-shadow: 0 1px 8px #fff, 0 1px 2px #bbb7;
+    }
+
+    header p {
+      color: var(--txt-dark);
+      font-size: 1.15em;
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+
+    #stats {
+      margin: 1em 0 0.5em 0;
+      display: flex;
+      gap: 2em;
+      justify-content: center;
+      font-size: 1.1em;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    #stats span {
+      display: flex;
+      align-items: center;
+      background: var(--bg-neutral3);
+      border-radius: 1em;
+      padding: 0.4em 1.3em;
+      margin-right: .5em;
+      font-weight: 700;
+      letter-spacing: .5px;
+      box-shadow: 0 2px 8px #0001;
+    }
+
+    h2.unit-title {
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-size: 1.3em;
+      font-weight: 700;
+      margin-top: 2em;
+      margin-bottom: 0.8em;
+      opacity: 0.89;
+      letter-spacing: .4px;
+      text-align: center;
+    }
+
+    .units {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .unit-section {
+      width: 96vw;
+      max-width: 1600px;
+      min-width: 340px;
+      margin-bottom: 1.3em;
+      box-sizing: border-box;
+      padding: 1.25em .8em;
+      border-radius: 19px;
+      box-shadow: 0 4px 19px #0001;
+      margin-top: 12px;
+      background: var(--bg-neutral2);
+    }
+
+    /* DISTRIBUCIÓN HORIZONTAL DE SEMESTRES O BLOQUES */
+    .semesters,
+    .modules-list {
+      display: flex;
+      flex-direction: row;
+      gap: 1.3em;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 1.1em;
+    }
+
+    /* COLUMNA DE CADA SEMESTRE O MÓDULO */
+    .semester-col,
+    .module-col {
+      flex: 1 1 190px;
+      min-width: 190px;
+      max-width: 220px;
+      background: var(--bg-neutral1);
+      border-radius: 14px;
+      box-sizing: border-box;
+      box-shadow: 0 2px 8px #0001;
+      padding: 1.17em .7em .9em .7em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Título semestre/módulo */
+    .semester-title,
+    .module-title {
+      font-size: 1.05em;
+      font-family: 'Montserrat', Arial, sans-serif;
+      font-weight: bold;
+      margin: 0 0 0.3em 0;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    /* Paletas de color por semestre */
+    .semester-title[data-sem="Pre"] { color: var(--pre-color);}
+    .semester-title[data-sem="1"] { color: var(--sem-1-6);}
+    .semester-title[data-sem="2"] { color: #EF6C00;}
+    .semester-title[data-sem="3"] { color: #6A1B9A;}
+    .semester-title[data-sem="4"] { color: #AD1457;}
+    .semester-title[data-sem="5"] { color: #FBC02D;}
+    .semester-title[data-sem="6"] { color: #C62828;}
+    .semester-title[data-sem="7"] { color: #1B5E20;}
+    .semester-title[data-sem="8"] { color: #0D47A1;}
+    .semester-title[data-sem="9"] { color: #424242;}
+
+    /* Por unidad */
+    .unit-pre { background: var(--pre-bg);}
+    .unit-basic { background: var(--bas-bg);}
+    .unit-prof { background: var(--prof-bg);}
+    .unit-tit { background: var(--tit-bg);}
+
+    /* TARJETAS */
+    .course {
+      width: 97%;
+      position: relative;
+      background: var(--bg-neutral3);
+      border-radius: 9px;
+      margin: 0.46em 0;
+      padding: 0.7em 0.75em 0.55em 0.75em;
+      font-size: 0.98em;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 1px 7px #00000009, 0 1px 1px #0000000c;
+      transition: box-shadow 0.16s, transform 0.16s;
+      user-select: none;
+      cursor: pointer;
+      border: 2px solid transparent;
+      color: #222;
+    }
+    .course.approved {
+      background: #d4e8d4;
+      border-color: #60c47a;
+      box-shadow: 0 0 6px #4dd78b55;
+      text-decoration: line-through;
+      opacity: 0.74;
+    }
+    .course.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #f4dddd !important;
+      color: #902d2d;
+      border-color: #e17474;
+      text-decoration: none;
+    }
+    .course .icon {
+      font-size: 1.19em;
+      margin-right: 0.72em;
+      min-width: 1.5em;
+      text-align: center;
+    }
+    .course .cr {
+      margin-left: auto;
+      font-weight: 700;
+      font-size: 0.92em;
+      color: #32714d;
+      background: #f3fef8;
+      padding: 0.10em 0.9em;
+      border-radius: 1em;
+      margin-right: 0.4em;
+      filter: brightness(0.85);
+    }
+
+    /* Tooltips */
+    .course .tooltip {
+      visibility: hidden;
+      background: #363636de;
+      color: #fff;
+      font-size: 0.92em;
+      position: absolute;
+      left: 24px;
+      top: 61%;
+      transform: translateY(-50%);
+      white-space: pre-line;
+      padding: 0.35em 0.7em;
+      border-radius: 7px;
+      z-index: 5;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.15s;
+    }
+    .course.locked:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Módulos */
+    .modules-list {
+      margin-top: 0.5em;
+      margin-bottom: 0.7em;
+    }
+    .module-col {
+      background: var(--mod-bg1);
+      min-width: 160px;
+    }
+    .module-title[data-mod="ing"] { color: var(--eng-title);}
+    .module-title[data-mod="comp"] { color: var(--comp-title);}
+
+    .module-course {
+      width: 97%;
+      background: var(--mod-bg2);
+      border-radius: 10px;
+      margin: 0.46em 0;
+      padding: 0.7em 0.6em 0.55em 0.6em;
+      font-size: 0.99em;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 1px 7px #00000014, 0 1px 1px #00000013;
+      border: 2px solid transparent;
+      color: #202020;
+      transition: filter 0.1s, box-shadow 0.15s;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+    }
+    .module-course.approved {
+      background: #dde6f5;
+      border-color: #4099c1;
+      box-shadow: 0 0 6px #00798070;
+      text-decoration: line-through;
+      opacity: 0.74;
+    }
+    .module-course.locked {
+      background: #f2e6ee !important;
+      border-color: #ab47bcaa;
+      color: #6a1b9a;
+      cursor: not-allowed;
+      opacity: 0.5;
+      text-decoration: none;
+    }
+
+    .module-course .icon { min-width: 1.54em; margin-right: 0.7em;}
+    .module-course .cr {
+      margin-left: auto;
+      font-size: 0.93em;
+      font-weight: 700;
+      color: #795eb7;
+      background: #f8f5fd;
+      border-radius: 1em;
+      padding: 0.1em 0.85em;
+      filter: brightness(0.80);
+    }
+    .module-course .tooltip {
+      visibility: hidden;
+      position: absolute;
+      left: 26px;
+      top: 68%;
+      transform: translateY(-50%);
+      background: #242424ee;
+      color: #fff;
+      font-size: 0.92em;
+      border-radius: 6px;
+      padding: 0.30em 0.95em;
+      z-index: 9;
+      white-space: pre-line;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.16s;
+    }
+    .module-course.locked:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .semesters, .modules-list {flex-wrap: wrap;}
+    }
+    @media (max-width: 650px) {
+      .semester-col, .module-col {min-width: 97vw; max-width: 99vw;}
+      .units {padding-left: 0; padding-right: 0;}
+      .unit-section {padding-left: 0; padding-right: 0;}
+      .modules-list, .semesters {gap: 0.2em;}
+      .course, .module-course { min-width: 95vw; }
+    }
+  </style>
 </head>
 <body>
-  <div class="header">
-    <h1>LICENCIATURA EN TURISMO</h1>
-    <h2>Malla curricular interactiva con créditos y prerequisitos</h2>
-  </div>
-  <div class="stats" id="stats">
-    <span><span id="aprobadas">0</span>/57 Materias aprobadas</span>
-    <span><span id="creditos">0</span> Créditos</span>
-    <span><span id="mod_ap">0</span>/9 Módulos aprobados</span>
-    <span><span id="mod_cred">0</span> Créditos en módulos</span>
-  </div>
-  <div class="container" id="curricula"></div>
-  <div class="modules-section">
-    <div class="modules-title">MÓDULOS</div>
-    <div class="modules-container">
-      <div class="module-box" data-mod="ing">
-        <div class="module-title" data-mod="ing">Inglés</div>
-        <div class="module-list" id="mod-ingles"></div>
-      </div>
-      <div class="module-box" data-mod="comp">
-        <div class="module-title" data-mod="comp">Computación</div>
-        <div class="module-list" id="mod-comp"></div>
-      </div>
+  <header>
+    <h1>Licenciatura en Turismo 🎓</h1>
+    <p>Malla Curricular Interactiva · 57 asignaturas · 9 módulos · Créditos automáticos</p>
+    <div id="stats">
+      <span id="mat-ap">Materias aprobadas: <b>0</b>/57</span>
+      <span id="mod-ap">Módulos aprobados: <b>0</b>/9</span>
+      <span id="credit-ap">Créditos obtenidos: <b>0</b></span>
     </div>
-  </div>
-<script>
-const UNIDADES = [
-  {
-    nombre: "Unidad Preuniversitaria",
-    color: "preu",
-    semestres: [
+  </header>
+  <main>
+    <div class="units">
+      <!-- Estructura generada por JavaScript -->
+    </div>
+  </main>
+  <script>
+    // ----------------- DATOS DE LA MALLA / ESTRUCTURA --------------
+    // Definición de materias con dependencias y créditos agrupadas por Unidades > Semestres/Bloques
+    const mallaData = [
       {
-        nombre: "PRE",
-        code: "pre",
-        color: "pre",
-        materias: [
-          { id: "epistem", nombre: "Epistemología del Turismo", icono: "🧠", creditos: 0, requisitos: [] },
-          { id: "introcom", nombre: "Introducción a la Comunicación Académica", icono: "✍️", creditos: 0, requisitos: [] },
-          { id: "pcomputo", nombre: "Pensamiento Computacional", icono: "💻", creditos: 0, requisitos: [] }
-        ]
-      }
-    ]
-  },
-  {
-    nombre: "Unidad Básica",
-    color: "basica",
-    semestres: [
-      {
-        nombre: "1er Semestre",
-        code: "1",
-        color: "1",
-        materias: [
-          { id: "matfina", nombre: "Matemática Financiera", icono:"💰", creditos:1.6666, requisitos: ["pcomputo"] },
-          { id: "tecapli", nombre: "Tecnología Aplicada", icono: "🛠️", creditos: 3.33, requisitos: ["pcomputo"] },
-          { id: "teotur", nombre: "Teoría Del Turismo", icono: "📚", creditos:3.33, requisitos: ["epistem"] },
-          { id: "admin", nombre: "Administración", icono: "📋", creditos:3.33, requisitos: ["introcom"] },
-          { id: "metod", nombre: "Metodología De La Investigación Científica", icono: "🔬", creditos:1.67, requisitos: ["introcom"] },
-          { id: "tectur", nombre: "Técnicas De Operación Turística", icono: "🧳", creditos:3.33, requisitos: ["epistem"] }
-        ]
-      },
-      {
-        nombre: "2do Semestre",
-        code: "2",
-        color: "2",
-        materias: [
-          { id: "cosmos", nombre: "Cosmos Histórico", icono: "🏺", creditos:3.33, requisitos: ["teotur"] },
-          { id: "bioent", nombre: "Bioentorno Turístico", icono:"🌱", creditos:3.33, requisitos: ["teotur"] },
-          { id: "tecguiar", nombre: "Técnicas De Guiar", icono:"🎤", creditos:3.33, requisitos: ["tectur"] },
-          { id: "hosp", nombre: "Hospitalidad", icono:"🤝", creditos:3.33, requisitos: ["admin"] },
-          { id: "estad", nombre: "Estadística Descriptiva Administrativa", icono:"📊", creditos:1.6666, requisitos:["matfina","tecapli"] },
-          { id: "comoral", nombre: "Comunicación Oral Y Escrita", icono:"🗣️", creditos:1.67, requisitos:["metod"] }
-        ]
-      },
-      {
-        nombre: "3er Semestre",
-        code: "3",
-        color: "3",
-        materias: [
-          { id: "comytur", nombre: "Comunidad Y Turismo", icono:"🏘️", creditos:1.6666, requisitos:["hosp"] },
-          { id: "gastropat", nombre: "Gastronomía Ancestral Y Patrimonio", icono:"🍲", creditos:3.33, requisitos:["hosp"] },
-          { id: "gestareas", nombre: "Gestión Operativa De Áreas Protegidas", icono:"🏞️", creditos:3.33, requisitos:["tecguiar"] },
-          { id: "maniplas", nombre: "Manifestaciones Plásticas Turísticas", icono:"🎨", creditos:3.33, requisitos:["cosmos","comoral"] },
-          { id: "prosinter", nombre: "Prospección Intercultural Ecuatoriana", icono:"🌎", creditos:1.6666, requisitos:["cosmos"] },
-          { id: "contgen", nombre: "Contabilidad General", icono:"📒", creditos:3.33, requisitos:["estad"] }
-        ]
-      }
-    ]
-  },
-  {
-    nombre: "Unidad Profesional",
-    color: "prof",
-    semestres: [
-      {
-        nombre: "4to Semestre",
-        code: "4",
-        color: "4",
-        materias: [
-          { id: "finan", nombre: "Finanzas De Corto Plazo", icono:"📈", creditos:3.33, requisitos:["contgen"] },
-          { id: "gestionterr", nombre: "Gestión Territorial En Turismo", icono:"🏛️", creditos:3.33, requisitos:["gestareas","maniplas"] },
-          { id: "gthc", nombre: "Gestión Del Talento Humano Por Competencias", icono: "👥", creditos:2.5, requisitos:["contgen"] },
-          { id: "folklore", nombre: "Folklore", icono:"🎭", creditos:1.6666, requisitos:["maniplas","prosinter"] },
-          { id: "codif", nombre: "Codificación Turística", icono:"🧩", creditos:3.33, requisitos:["gestareas"] },
-          { id: "campismo", nombre: "Campismo Y Recreación Turística", icono: "⛺", creditos:1.6666, requisitos:["gastropat","comytur"] }
-        ]
-      },
-      {
-        nombre: "5to Semestre",
-        code: "5",
-        color: "5",
-        materias: [
-          { id: "arqueo", nombre: "Arqueología", icono:"🗿", creditos:1.6666, requisitos:["folklore"] },
-          { id: "micro", nombre: "Microeconomía", icono:"🏦", creditos:3.33, requisitos:["finan"] },
-          { id: "iconotur", nombre: "Iconografía Turística", icono:"🖼️", creditos:1.6666, requisitos:["campismo"] },
-          { id: "opetours", nombre: "Operación De Tours", icono:"🚍", creditos:3.33, requisitos:["codif","gestionterr"] },
-          { id: "fomentoreg", nombre: "Fomento Y Regulaciones A La Actividad Turística", icono:"⚖️", creditos:3.33, requisitos:["gthc"] },
-          { id: "desarollotur", nombre: "Desarrollo Del Turismo Sostenible", icono:"♻️", creditos:5, requisitos:["matfina","tecapli","teotur","admin","metod","tectur","cosmos","bioent","tecguiar","hosp","estad","comoral","comytur","gastropat","gestareas","maniplas","prosinter","contgen","finan","gestionterr","gthc","folklore","codif","campismo"] }
-        ]
-      },
-      {
-        nombre: "6to Semestre",
-        code: "6",
-        color: "6",
-        materias: [
-          { id: "plantur", nombre: "Planificación Turística", icono:"🗓️", creditos:5, requisitos:["matfina","tecapli","teotur","admin","metod","tectur","cosmos","bioent","tecguiar","hosp","estad","comoral","comytur","gastropat","gestareas","maniplas","prosinter","contgen","finan","gestionterr","gthc","folklore","codif","campismo","arqueo","micro","iconotur","opetours","fomentoreg","desarollotur"] },
-          { id: "gesinnov", nombre: "Gestión De La Innovación Y Emprendimiento", icono:"🚀", creditos:3.33, requisitos:["fomentoreg"] },
-          { id: "animtur", nombre: "Animación Turística", icono:"🎬", creditos:3.33, requisitos:["iconotur"] },
-          { id: "rice", nombre: "Rice - Organización De Eventos", icono:"📅", creditos:1.6666, requisitos:["desarollotur"] },
-          { id: "sistreg", nombre: "Sistemas De Registros Turísticos / Sabre Y Amadeus", icono:"🧾", creditos:1.6666, requisitos:["opetours"] },
-          { id: "macro", nombre: "Macroeconomía", icono:"🌐", creditos:3.33, requisitos:["micro"] }
-        ]
-      },
-      {
-        nombre: "7mo Semestre",
-        code: "7",
-        color: "7",
-        materias: [
-          { id: "patrimonio", nombre: "Patrimonio", icono:"🏛️", creditos:5, requisitos:["plantur","gesinnov","animtur","rice","sistreg","macro"] },
-          { id: "gcalidad", nombre: "Gestión De Calidad Y La Productividad", icono:"✅", creditos:3.33, requisitos:["gesinnov"] },
-          { id: "alibe", nombre: "Operación De Alimentos Y Bebidas", icono:"🍽️", creditos:1.6666, requisitos:["animtur"] },
-          { id: "hoteleria", nombre: "Operación Hotelera", icono:"🏨", creditos:3.33, requisitos:["sistreg"] },
-          { id: "sociotur", nombre: "Sociología Del Turismo", icono:"👨‍👩‍👧‍👦", creditos:3.33, requisitos:["animtur"] },
-          { id: "tendtur", nombre: "Tendencias Turísticas", icono:"📈", creditos:1.6666, requisitos:["macro"] }
-        ]
-      }
-    ]
-  },
-  {
-    nombre: "Unidad de Titulación",
-    color: "titu",
-    semestres: [
-      {
-        nombre: "8vo Semestre",
-        code: "8",
-        color: "8",
-        materias: [
-          { id: "fyep", nombre: "Formulación Y Evaluación De Proyectos", icono:"📐", creditos:3.33, requisitos:["gcalidad"] },
-          { id: "integ", nombre: "Integración Regional Turística", icono:"🤝", creditos:5, requisitos:["patrimonio","gcalidad","alibe","hoteleria","sociotur","tendtur"] },
-          { id: "estrac", nombre: "Estrategias Comerciales Turísticas", icono:"🎯", creditos:3.33, requisitos:["tendtur"] },
-          { id: "redtit", nombre: "Redacción Del Trabajo De Titulación", icono:"📖", creditos:1.6666, requisitos:["patrimonio","gcalidad","alibe","hoteleria","sociotur","tendtur"] },
-          { id: "arteycultu", nombre: "Apreciación Del Arte Y La Cultura", icono:"🖌️", creditos:1.6666, requisitos:["patrimonio"] },
-          { id: "gobernanza", nombre: "Turismo Y Gobernanza", icono:"🏛️", creditos:3.33, requisitos:["alibe","sociotur"] }
-        ]
-      },
-      {
-        nombre: "9no Semestre",
-        code: "9",
-        color: "9",
-        materias: [
-          { id: "gesdest", nombre: "Gestión Integral De Destinos Turísticos", icono:"🌟", creditos:5, requisitos:["fyep","integ","estrac","redtit","arteycultu","gobernanza"] },
-          { id: "negociatur", nombre: "Técnicas De Negociación Y Comunicación Para El Turismo", icono:"🤝🗣️", creditos:3.3333, requisitos:["estrac"] },
-          { id: "realnac", nombre: "Realidad Nacional Y Geopolítica", icono:"🌏", creditos:1.67, requisitos:["gobernanza"] },
-          { id: "trabtit", nombre: "Trabajo De Titulación", icono:"🎓", creditos:3.33, requisitos:["redtit"] },
-          { id: "contrapub", nombre: "Contratación Pública", icono:"📝", creditos:3.33, requisitos:["fyep"] },
-          { id: "liderazgo", nombre: "Liderazgo", icono:"👑", creditos:1.6666, requisitos:["arteycultu"] }
-        ]
-      }
-    ]
-  }
-];
-
-// Módulos
-const MODULOS = [
-  {
-    nombre: "Inglés",
-    code: "ing",
-    list: [
-      {id: "ing_a1m", nombre: "-A1", icono: "🔴🏆", creditos:2.08, requisitos: []},
-      {id: "ing_a1", nombre: "A1", icono: "🟠🏆", creditos:2.08, requisitos:["ing_a1m"]},
-      {id: "ing_a2", nombre: "A2", icono: "🟡🏆", creditos:2.08, requisitos:["ing_a1"]},
-      {id: "ing_b1", nombre: "B1", icono: "🟢🏆", creditos:2.08, requisitos:["ing_a2"]},
-      {id: "ing_b2", nombre: "B2", icono: "🔵🏆", creditos:2.08, requisitos:["ing_b1"]},
-      {id: "ing_c1", nombre: "C1", icono: "🟣🏆", creditos:2.08, requisitos:["ing_b2"]},
-      {id: "ing_c2", nombre: "C2", icono: "🟤🏆", creditos:2.08, requisitos:["ing_c1"]}
-    ]
-  },
-  {
-    nombre: "Computación",
-    code: "comp",
-    list: [
-      {id: "comp_win", nombre: "Windows - Word - Internet", icono: "🪟📄🌐", creditos:8, requisitos:[]},
-      {id: "comp_excel", nombre: "Excel – Power Point", icono: "📊📽️", creditos:8, requisitos:["comp_win"]}
-    ]
-  }
-];
-
-// -- Renderizado de malla curricular --
-function renderCurricula(){
-  const container = document.getElementById('curricula');
-  container.innerHTML = '';
-  for(const unidad of UNIDADES){
-    const unitDiv = document.createElement('div');
-    unitDiv.className = 'unit';
-    // Título con color por unidad
-    const tit = document.createElement('div');
-    tit.className = 'unit-title';
-    if(unidad.color) tit.dataset.color = unidad.color;
-    tit.textContent = unidad.nombre;
-    unitDiv.appendChild(tit);
-
-    // Secciones de semestres
-    const semRow = document.createElement('div');
-    semRow.className = 'unit-sems';
-    for(const sem of unidad.semestres){
-      const semCol = document.createElement('div');
-      semCol.className = 'sem-col';
-      semCol.dataset.sem = sem.code;
-
-      // Título
-      const title = document.createElement('div');
-      title.className = 'sem-title';
-      title.textContent = sem.nombre;
-      title.dataset.sem = sem.code;
-      semCol.appendChild(title);
-
-      // Materias
-      const list = document.createElement('div');
-      list.className = 'subjects';
-      for(const mat of sem.materias){
-        const subj = document.createElement('div');
-        subj.className = 'subject-card';
-        subj.setAttribute('tabindex','0');
-        subj.dataset.id = mat.id;
-        subj.dataset.creditos = mat.creditos;
-        subj.setAttribute('data-sem', sem.code);
-        if(mat.requisitos.length>0) subj.dataset.req = mat.requisitos.join("|");
-
-        subj.innerHTML = `<span class='subject-icon'>${mat.icono}</span>
-                          <span class='subject-label'>${mat.nombre}</span>
-                          <span class='subject-credit'>${mat.creditos?mat.creditos:"0"}</span>
-                          <span class='subject-check'>✔️</span>
-                          `;
-        // Event: onClick aprobar
-        subj.addEventListener('click', function(e){
-          aprobarMateria(mat.id);
-        });
-        // Keyboard acc
-        subj.addEventListener('keydown', function(e){
-          if(e.key === "Enter" || e.key ===" "){
-            e.preventDefault();
-            aprobarMateria(mat.id);
+        unit: "Unidad Preuniversitaria",
+        colorClass: "unit-pre",
+        semestres: [
+          {
+            label: "PRE",
+            color: ["var(--pre-1)", "var(--pre-2)", "var(--pre-3)", "var(--pre-4)", "var(--pre-5)", "var(--pre-6)"],
+            cursos: [
+              { id: "epist", n: "Epistemología del Turismo", icon: "🧠", credit: 0, dep: [] },
+              { id: "com-acad", n: "Introducción a la Comunicación Académica", icon: "✍️", credit: 0, dep: [] },
+              { id: "pc", n: "Pensamiento Computacional", icon: "💻", credit: 0, dep: [] }
+            ]
           }
+        ]
+      },
+      {
+        unit: "Unidad Básica",
+        colorClass: "unit-basic",
+        semestres: [
+          {
+            label: "1",
+            color: ["var(--sem-1-1)", "var(--sem-1-2)", "var(--sem-1-3)", "var(--sem-1-4)", "var(--sem-1-5)", "var(--sem-1-6)"],
+            cursos: [
+              { id: "mf", n: "Matemática Financiera", icon: "💰", credit: 1.6666, dep: ["pc"] },
+              { id: "tecap", n: "Tecnología Aplicada", icon: "🛠️", credit: 3.33, dep: ["pc"] },
+              { id: "teotur", n: "Teoría del Turismo", icon: "📚", credit: 3.33, dep: ["epist"] },
+              { id: "admin", n: "Administración", icon: "📋", credit: 3.33, dep: ["com-acad"] },
+              { id: "metodo", n: "Metodología de la Investigación Científica", icon: "🔬", credit: 1.67, dep: ["com-acad"] },
+              { id: "tecop", n: "Técnicas de Operación Turística", icon: "🧳", credit: 3.33, dep: ["epist"] }
+            ]
+          },
+          {
+            label: "2",
+            color: ["var(--sem-2-1)", "var(--sem-2-2)", "var(--sem-2-3)", "var(--sem-2-4)", "var(--sem-2-5)", "var(--sem-2-6)"],
+            cursos: [
+              { id: "cosmos", n: "Cosmos Histórico", icon: "🏺", credit: 3.33, dep: ["teotur"] },
+              { id: "bioent", n: "Bioentorno Turístico", icon: "🌱", credit: 3.33, dep: ["teotur"] },
+              { id: "guiar", n: "Técnicas de Guiar", icon: "🗺️", credit: 3.33, dep: ["tecop"] },
+              { id: "hot", n: "Hospitalidad", icon: "🤝", credit: 3.33, dep: ["admin"] },
+              { id: "estad", n: "Estadística Descriptiva Administrativa", icon: "📊", credit: 1.6666, dep: ["mf", "tecap"] },
+              { id: "comoscr", n: "Comunicación Oral y Escrita", icon: "🗣️", credit: 1.67, dep: ["metodo"] }
+            ]
+          },
+          {
+            label: "3",
+            color: ["var(--sem-3-1)", "var(--sem-3-2)", "var(--sem-3-3)", "var(--sem-3-4)", "var(--sem-3-5)", "var(--sem-3-6)"],
+            cursos: [
+              { id: "comytur", n: "Comunidad y Turismo", icon: "🏘️", credit: 1.6666, dep: ["hot"] },
+              { id: "gastpat", n: "Gastronomía Ancestral y Patrimonio", icon: "🍲", credit: 3.33, dep: ["hot"] },
+              { id: "gestap", n: "Gestión Operativa de Áreas Protegidas", icon: "🏞️", credit: 3.33, dep: ["guiar"] },
+              { id: "mplast", n: "Manifestaciones Plásticas Turísticas", icon: "🎨", credit: 3.33, dep: ["cosmos", "comoscr"] },
+              { id: "prosint", n: "Prospección Intercultural Ecuatoriana", icon: "🌎", credit: 1.6666, dep: ["cosmos"] },
+              { id: "contag", n: "Contabilidad General", icon: "📒", credit: 3.33, dep: ["estad"] }
+            ]
+          }
+        ]
+      },
+      {
+        unit: "Unidad Profesional",
+        colorClass: "unit-prof",
+        semestres: [
+          {
+            label: "4",
+            color: ["var(--sem-4-1)", "var(--sem-4-2)", "var(--sem-4-3)", "var(--sem-4-4)", "var(--sem-4-5)", "var(--sem-4-6)"],
+            cursos: [
+              { id: "finz", n: "Finanzas de Corto Plazo", icon: "📈", credit: 3.33, dep: ["contag"] },
+              { id: "gestterr", n: "Gestión Territorial en Turismo", icon: "🌍", credit: 3.33, dep: ["gestap", "mplast"] },
+              { id: "talhum", n: "Gestión del Talento Humano por Competencias", icon: "👥", credit: 2.5, dep: ["contag"] },
+              { id: "folk", n: "Folklore", icon: "🎭", credit: 1.6666, dep: ["mplast", "prosint"] },
+              { id: "codif", n: "Codificación Turística", icon: "🧩", credit: 3.33, dep: ["gestap"] },
+              { id: "camp", n: "Campismo y Recreación Turística", icon: "⛺", credit: 1.6666, dep: ["gastpat", "comytur"] }
+            ]
+          },
+          {
+            label: "5",
+            color: ["var(--sem-5-1)", "var(--sem-5-2)", "var(--sem-5-3)", "var(--sem-5-4)", "var(--sem-5-5)", "var(--sem-5-6)"],
+            cursos: [
+              { id: "arqueo", n: "Arqueología", icon: "🗿", credit: 1.6666, dep: ["folk"] },
+              { id: "micro", n: "Microeconomía", icon: "🏦", credit: 3.33, dep: ["finz"] },
+              { id: "icono", n: "Iconografía Turística", icon: "🖼️", credit: 1.6666, dep: ["camp"] },
+              { id: "optours", n: "Operación de Tours", icon: "🚍", credit: 3.33, dep: ["codif", "gestterr"] },
+              { id: "fomreg", n: "Fomento y Regulaciones a la Actividad Turística", icon: "⚖️", credit: 3.33, dep: ["talhum"] },
+              { id: "devtursos", n: "Desarrollo del Turismo Sostenible", icon: "♻️", credit: 5, dep: [
+                "mf","tecap","teotur","admin","metodo","tecop","cosmos","bioent","guiar","hot","estad",
+                "comoscr","comytur","gastpat","gestap","mplast","prosint","contag",
+                "finz","gestterr","talhum", "folk","codif","camp"
+              ]}
+            ]
+          },
+          {
+            label: "6",
+            color: ["var(--sem-6-1)", "var(--sem-6-2)", "var(--sem-6-3)", "var(--sem-6-4)", "var(--sem-6-5)", "var(--sem-6-6)"],
+            cursos: [
+              { id: "plantur", n: "Planificación Turística", icon: "🗓️", credit: 5, dep: [
+                "mf","tecap","teotur","admin","metodo","tecop","cosmos","bioent","guiar","hot","estad",
+                "comoscr","comytur","gastpat","gestap","mplast","prosint","contag",
+                "finz","gestterr","talhum", "folk","codif","camp","arqueo","micro","icono","optours","fomreg","devtursos"
+              ]},
+              { id: "innoemp", n: "Gestión de la Innovación y Emprendimiento", icon: "🚀", credit: 3.33, dep: ["fomreg"] },
+              { id: "anmtur", n: "Animación Turística", icon: "🎬", credit: 3.33, dep: ["icono"] },
+              { id: "rice", n: "Rice – Organización de Eventos", icon: "📅", credit: 1.6666, dep: ["devtursos"] },
+              { id: "sabream", n: "Sistemas de Registros Turísticos / Sabre y Amadeus", icon: "🧾", credit: 1.6666, dep: ["optours"] },
+              { id: "macro", n: "Macroeconomía", icon: "🌐", credit: 3.33, dep: ["micro"] }
+            ]
+          },
+          {
+            label: "7",
+            color: ["var(--sem-7-1)", "var(--sem-7-2)", "var(--sem-7-3)", "var(--sem-7-4)", "var(--sem-7-5)", "var(--sem-7-6)"],
+            cursos: [
+              { id: "patr", n: "Patrimonio", icon: "🏛️", credit: 5, dep: ["plantur","innoemp","anmtur","rice","sabream","macro"] },
+              { id: "calid", n: "Gestión de Calidad y la Productividad", icon: "✅", credit: 3.33, dep: ["innoemp"] },
+              { id: "opayb", n: "Operación de Alimentos y Bebidas", icon: "🍽️", credit: 1.6666, dep: ["anmtur"] },
+              { id: "ophotel", n: "Operación Hotelera", icon: "🏨", credit: 3.33, dep: ["sabream"] },
+              { id: "sociotur", n: "Sociología del Turismo", icon: "👨‍👩‍👧‍👦", credit: 3.33, dep: ["anmtur"] },
+              { id: "tend", n: "Tendencias Turísticas", icon: "📈", credit: 1.6666, dep: ["macro"] }
+            ]
+          }
+        ]
+      },
+      {
+        unit: "Unidad de Titulación",
+        colorClass: "unit-tit",
+        semestres: [
+          {
+            label: "8",
+            color: ["var(--sem-8-1)", "var(--sem-8-2)", "var(--sem-8-3)", "var(--sem-8-4)", "var(--sem-8-5)", "var(--sem-8-6)"],
+            cursos: [
+              { id: "formevproj", n: "Formulación y Evaluación de Proyectos", icon: "📐", credit: 3.33, dep: ["calid"] },
+              { id: "integ", n: "Integración Regional Turística", icon: "🤝", credit: 5, dep: ["patr","calid","opayb","ophotel","sociotur","tend"] },
+              { id: "estrat", n: "Estrategias Comerciales Turísticas", icon: "🎯", credit: 3.33, dep: ["tend"] },
+              { id: "redact", n: "Redacción del Trabajo de Titulación", icon: "📖", credit: 1.6666, dep: ["patr","calid","opayb","ophotel","sociotur","tend"] },
+              { id: "aparte", n: "Apreciación del Arte y la Cultura", icon: "🖌️", credit: 1.6666, dep: ["patr"] },
+              { id: "gobernanza", n: "Turismo y Gobernanza", icon: "🏛️", credit: 3.33, dep: ["opayb","sociotur"] }
+            ]
+          },
+          {
+            label: "9",
+            color: ["var(--sem-9-1)", "var(--sem-9-2)", "var(--sem-9-3)", "var(--sem-9-4)", "var(--sem-9-5)", "var(--sem-9-6)"],
+            cursos: [
+              { id: "gidest", n: "Gestión Integral de Destinos Turísticos", icon: "🌟", credit: 5, dep: ["formevproj","integ","estrat","redact","aparte","gobernanza"] },
+              { id: "tecnnec", n: "Técnicas de Negociación y Comunicación para el Turismo", icon: "🤝🗣️", credit: 3.3333, dep: ["estrat"] },
+              { id: "realgeo", n: "Realidad Nacional y Geopolítica", icon: "🌏", credit: 1.67, dep: ["gobernanza"] },
+              { id: "trabtit", n: "Trabajo de Titulación", icon: "🎓", credit: 3.33, dep: ["redact"] },
+              { id: "contrpub", n: "Contratación Pública", icon: "📝", credit: 3.33, dep: ["formevproj"] },
+              { id: "lider", n: "Liderazgo", icon: "👑", credit: 1.6666, dep: ["aparte"] }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // MODULOS
+    const modulos = [
+      {
+        block: "Inglés",
+        color: ["var(--eng-1)", "var(--eng-2)", "var(--eng-3)", "var(--eng-4)", "var(--eng-5)", "var(--eng-6)", "var(--eng-7)"],
+        colorTitle: "var(--eng-title)",
+        blockKey: "ing",
+        cursos: [
+          { id: "m-ina1", n: "-A1", icon: "🔴🏆", credit: 2.08, dep: [] },
+          { id: "m-a1", n: "A1", icon: "🟠🏆", credit: 2.08, dep: ["m-ina1"] },
+          { id: "m-a2", n: "A2", icon: "🟡🏆", credit: 2.08, dep: ["m-a1"] },
+          { id: "m-b1", n: "B1", icon: "🟢🏆", credit: 2.08, dep: ["m-a2"] },
+          { id: "m-b2", n: "B2", icon: "🔵🏆", credit: 2.08, dep: ["m-b1"] },
+          { id: "m-c1", n: "C1", icon: "🟣🏆", credit: 2.08, dep: ["m-b2"] },
+          { id: "m-c2", n: "C2", icon: "🟤🏆", credit: 2.08, dep: ["m-c1"] }
+        ]
+      },
+      {
+        block: "Computación",
+        color: ["var(--comp-1)", "var(--comp-2)"],
+        colorTitle: "var(--comp-title)",
+        blockKey: "comp",
+        cursos: [
+          { id: "comp-win", n: "Windows - Word - Internet", icon: "🪟📄🌐", credit: 8, dep: [] },
+          { id: "comp-excel", n: "Excel – Power Point", icon: "📊📽️", credit: 8, dep: ["comp-win"] }
+        ]
+      }
+    ];
+
+    // ---- ESTADO del usuario: localStorage
+    let estado = {materias: {}, modulos: {}};
+    function loadEstado() {
+      try {
+        estado = JSON.parse(localStorage.getItem('malla-turismo')) || {materias:{}, modulos:{}};
+      } catch (e) { estado = {materias:{}, modulos:{}}; }
+    }
+    function saveEstado() {
+      localStorage.setItem('malla-turismo', JSON.stringify(estado));
+    }
+
+    // --- IDs aprobados actuales
+    function cursosAprobados() {
+      return Object.entries(estado.materias).filter(arr=>arr[1]).length;
+    }
+    function modAprobados() {
+      return Object.entries(estado.modulos).filter(arr=>arr[1]).length;
+    }
+    function sumCreditos() {
+      let c=0;
+      // materias
+      mallaData.forEach(unit=>{
+        unit.semestres.forEach(sem=>{
+          sem.cursos.forEach(cur=>{
+            if(estado.materias[cur.id]) c+=Number(cur.credit);
+          });
         });
-        list.appendChild(subj);
-      }
-      semCol.appendChild(list);
-      semRow.appendChild(semCol);
-    }
-    unitDiv.appendChild(semRow);
-    container.appendChild(unitDiv);
-  }
-}
-// -- Renderizado Módulos
-function renderModulos(){
-  for(const module of MODULOS){
-    const listdiv = document.getElementById("mod-" + module.code);
-    listdiv.innerHTML = '';
-    for(const mod of module.list){
-      const modcard = document.createElement('div');
-      modcard.className = 'module-card';
-      modcard.setAttribute('tabindex','0');
-      modcard.dataset.id = mod.id;
-      modcard.dataset.creditos = mod.creditos;
-      if(mod.requisitos.length>0) modcard.dataset.req = mod.requisitos.join("|");
-      modcard.innerHTML = `<span class="mod-icon">${mod.icono}</span>
-                           <span class="mod-label">${mod.nombre}</span>
-                           <span class="mod-credit">${mod.creditos}</span>
-                           <span class='mod-check'>✔️</span>
-                           `;
-      modcard.addEventListener('click', function(e){
-        aprobarModulo(mod.id);
       });
-      modcard.addEventListener('keydown', function(e){
-        if(e.key === "Enter" || e.key ===" "){
-          e.preventDefault();
-          aprobarModulo(mod.id);
-        }
+      // modulos
+      modulos.forEach(md=>{
+        md.cursos.forEach(mod=>{
+          if(estado.modulos[mod.id]) c+=Number(mod.credit);
+        });
       });
-      listdiv.appendChild(modcard);
+      return c;
     }
-  }
-}
 
-function getAprobadas(){
-  let arr = JSON.parse(localStorage.getItem('malla_turismo_aprob'))||[];
-  return new Set(arr);
-}
-function getModAprobadas(){
-  let arr = JSON.parse(localStorage.getItem('malla_turismo_mod_aprob'))||[];
-  return new Set(arr);
-}
-function aprobarMateria(id){
-  let aprob = getAprobadas();
-  if(aprob.has(id)){
-    aprob.delete(id);
-  }else{
-    // Sólo si está desbloqueada
-    if(!document.querySelector(`[data-id="${id}"]`).classList.contains('locked')){
-      aprob.add(id);
+    // Validar bloqueado o tooltip dependencias NO aprobadas
+    function isLocked(course, allAprobados) {
+      if(!course.dep || !course.dep.length) return false;
+      // todas dependencias deben estar verdaderas
+      let faltan = course.dep.filter(d=>!allAprobados[d]);
+      return faltan.length>0 ? faltan : false;
     }
-  }
-  localStorage.setItem('malla_turismo_aprob',JSON.stringify(Array.from(aprob)));
-  actualizarEstado();
-}
-function aprobarModulo(id){
-  let aprob = getModAprobadas();
-  if(aprob.has(id)){
-    aprob.delete(id);
-  }else{
-    if(!document.querySelector(`[data-id="${id}"]`).classList.contains('locked')){
-      aprob.add(id);
+    function nombreById(id) {
+      // buscar en mallaData o modulos
+      for(const unit of mallaData)
+        for(const sem of unit.semestres)
+          for(const cur of sem.cursos)
+            if(cur.id===id) return cur.n;
+      for(const md of modulos)
+        for(const m of md.cursos)
+          if(m.id===id) return m.n;
+      return id;
     }
-  }
-  localStorage.setItem('malla_turismo_mod_aprob',JSON.stringify(Array.from(aprob)));
-  actualizarEstado();
-}
 
-// Estado para tooltips y bloqueos
-function actualizarEstado(){
-  let aprob = getAprobadas();
-  let aprobM = getModAprobadas();
+    // -------- GENERAR HTML ---------
+    function generarMalla() {
+      loadEstado();
+      const unitsOut = [];
+      let allAprobados = Object.assign({}, estado.materias, estado.modulos);
 
-  // MATERIAS
-  let idsAprob = new Set(aprob);
-  document.querySelectorAll('.subject-card').forEach(card=>{
-    let id = card.dataset.id;
-    let mat = buscarMateriaPorID(id);
-
-    // ¿Bloqueada?
-    let locked = false, reason = [];
-    if(mat.requisitos.length){
-      for(let req of mat.requisitos){
-        if(!idsAprob.has(req)){
-          locked = true;
-          let faltan = buscarMateriaPorID(req);
-          reason.push(faltan?faltan.nombre:req);
+      // UNIDADES PRINCIPALES
+      for(const unit of mallaData) {
+        const section = document.createElement('section');
+        section.className = "unit-section "+unit.colorClass;
+        const h2 = document.createElement('h2');
+        h2.className = "unit-title";
+        h2.innerText = unit.unit;
+        section.appendChild(h2);
+        // por semestres/columna
+        const row = document.createElement('div');
+        row.className = "semesters";
+        for(let i=0;i<unit.semestres.length;i++){
+          const sem = unit.semestres[i];
+          const scol = document.createElement('div');
+          scol.className = "semester-col";
+          // Título
+          const t = document.createElement('div');
+          t.className = "semester-title";
+          t.setAttribute('data-sem', sem.label);
+          t.innerText = (["PRE","1","2","3","4","5","6","7","8","9"].includes(sem.label)?sem.label+"° Semestre":sem.label);
+          scol.appendChild(t);
+          // materias de semestre
+          for(let j=0;j<sem.cursos.length;j++){
+            const cur = sem.cursos[j];
+            const div = document.createElement('div');
+            div.className = "course";
+            // ¿Aprobada? ¿Bloqueada?
+            let bloqueada = false, tooltip = '';
+            const faltan = isLocked(cur, allAprobados);
+            if(Array.isArray(faltan) && faltan.length>0) {
+              bloqueada = true;
+              div.classList.add("locked");
+              tooltip = 'Falta(n):\n'+faltan.map(fid=>'· '+nombreById(fid)).join('\n');
+            }
+            if(estado.materias[cur.id]) div.classList.add("approved");
+            // Icono, nombre, créditos
+            div.innerHTML = `<span class="icon">${cur.icon||""}</span> ${cur.n} <span class="cr" title="Créditos">${Number(cur.credit).toFixed(2)}</span>`;
+            // Tooltip
+            if(bloqueada)
+              div.innerHTML += `<span class="tooltip">${tooltip}</span>`;
+            // Interacción
+            div.addEventListener('click',e=>{
+              if (bloqueada) return;
+              estado.materias[cur.id]= !estado.materias[cur.id];
+              saveEstado(); renderMalla();
+            });
+            scol.appendChild(div);
+          }
+          row.appendChild(scol);
         }
+        section.appendChild(row);
+        unitsOut.push(section);
+        // una vez hecho el dom, actualizar el array allAprobados temporal a la vista
+        // para dependencias en cascada dentro de misma unidad
+        for(const sem of unit.semestres)
+          for(const cur of sem.cursos)
+            if(estado.materias[cur.id]) allAprobados[cur.id]=true;
       }
-    }
-    if(locked){
-      card.classList.add("locked");
-      card.classList.remove("approved");
-      card.setAttribute('data-tooltip','Faltan: ' + reason.join(", "));
-    }else{
-      card.classList.remove("locked");
-      card.setAttribute('data-tooltip','');
-      if(idsAprob.has(id)){
-        card.classList.add("approved");
-      }else{
-        card.classList.remove("approved");
-      }
-    }
-  });
 
-  // MODULOS
-  let idsAprobM = new Set(aprobM);
-  document.querySelectorAll('.module-card').forEach(card=>{
-    let id = card.dataset.id;
-    let mod = buscarModuloPorID(id);
-
-    let locked = false, reason=[];
-    if(mod.requisitos.length){
-      for(let req of mod.requisitos){
-        if(!idsAprobM.has(req)){
-          locked = true;
-          let faltan = buscarModuloPorID(req);
-          reason.push(faltan?faltan.nombre:req);
+      // MODULOS
+      const modulesSection = document.createElement('section');
+      modulesSection.className = "unit-section";
+      const mh = document.createElement('h2');
+      mh.className = "unit-title";
+      mh.innerText = "Módulos";
+      modulesSection.appendChild(mh);
+      const modulesList = document.createElement('div');
+      modulesList.className = "modules-list";
+      for(let k=0;k<modulos.length;k++){
+        const md = modulos[k];
+        const modcol = document.createElement('div');
+        modcol.className = "module-col";
+        const moduleTitle = document.createElement('div');
+        moduleTitle.className = "module-title";
+        moduleTitle.setAttribute('data-mod', md.blockKey);
+        moduleTitle.innerText = md.block;
+        modcol.appendChild(moduleTitle);
+        for(let m=0;m<md.cursos.length;m++){
+          const mod = md.cursos[m];
+          const divm = document.createElement('div');
+          divm.className = "module-course";
+          let bloqueada = false, tooltip = '';
+          const faltan = isLocked(mod, allAprobados);
+          if (Array.isArray(faltan) && faltan.length>0){
+            bloqueada = true;
+            divm.classList.add("locked");
+            tooltip = 'Falta(n):\n'+faltan.map(fid=>'· '+nombreById(fid)).join('\n');
+          }
+          if(estado.modulos[mod.id]) divm.classList.add("approved");
+          // icon, nombre, créditos
+          divm.innerHTML = `<span class="icon">${mod.icon||""}</span> ${mod.n} <span class="cr" title="Créditos">${Number(mod.credit).toFixed(2)}</span>`;
+          if(bloqueada)
+            divm.innerHTML += `<span class="tooltip">${tooltip}</span>`;
+          divm.addEventListener('click',e=>{
+            if(bloqueada) return;
+            estado.modulos[mod.id]= !estado.modulos[mod.id];
+            saveEstado(); renderMalla();
+          });
+          modcol.appendChild(divm);
         }
+        modulesList.appendChild(modcol);
+      }
+      modulesSection.appendChild(modulesList);
+      unitsOut.push(modulesSection);
+
+      // limpiar y agregar al DOM
+      const unitsDiv = document.querySelector('.units');
+      unitsDiv.innerHTML = "";
+      for(const sect of unitsOut){
+        unitsDiv.appendChild(sect);
       }
     }
-    if(locked){
-      card.classList.add("locked");
-      card.classList.remove("approved");
-      card.setAttribute('data-tooltip','Falta: ' + reason.join(", "));
-    }else{
-      card.classList.remove("locked");
-      card.setAttribute('data-tooltip','');
-      if(idsAprobM.has(id)){
-        card.classList.add("approved");
-      }else{
-        card.classList.remove("approved");
-      }
-    }
-  });
-  // Estadísticas
-  let total = 0, creditos = 0;
-  document.querySelectorAll('.subject-card').forEach(card=>{
-    if(card.classList.contains('approved')){
-      total += 1;
-      creditos += Number(card.dataset.creditos||0);
-    }
-  });
-  document.getElementById('aprobadas').textContent = total;
-  document.getElementById('creditos').textContent = creditos.toFixed(2);
 
-  let tmod = 0, credmod = 0;
-  document.querySelectorAll('.module-card').forEach(card=>{
-    if(card.classList.contains('approved')){
-      tmod += 1;
-      credmod += Number(card.dataset.creditos || 0);
+    // ---- ACTUALIZA ESTADÍSTICAS ----
+    function renderMalla() {
+      generarMalla();
+      document.getElementById('mat-ap').querySelector('b').innerText = cursosAprobados();
+      document.getElementById('mod-ap').querySelector('b').innerText = modAprobados();
+      document.getElementById('credit-ap').querySelector('b').innerText = sumCreditos().toFixed(2);
     }
-  });
-  document.getElementById('mod_ap').textContent = tmod;
-  document.getElementById('mod_cred').textContent = credmod.toFixed(2);
-}
 
-function buscarMateriaPorID(id){
-  for(const unidad of UNIDADES){
-    for(const sem of unidad.semestres){
-      for(const mat of sem.materias){
-        if(mat.id === id) return mat;
-      }
-    }
-  }
-  return null;
-}
-function buscarModuloPorID(id){
-  for(const m of MODULOS){
-    for(const card of m.list){
-      if(card.id === id) return card;
-    }
-  }
-  return null;
-}
-// Reset
-function resetearProgreso(){
-  if(confirm("¿Resetear el progreso?")) {
-    localStorage.removeItem('malla_turismo_aprob');
-    localStorage.removeItem('malla_turismo_mod_aprob');
-    location.reload();
-  }
-}
-function agregarResetBtn(){
-  let stats = document.getElementById('stats');
-  let reset = document.createElement('button');
-  reset.textContent="Resetear Progreso";
-  reset.style = "margin-left:2em;background:#1AB4E8;color:#fff;border:none;border-radius:6px;padding:.33em 1.2em;font-size:.98em;cursor:pointer;";
-  reset.onclick=resetearProgreso;
-  stats.appendChild(reset);
-}
-// INIT
-renderCurricula();
-renderModulos();
-actualizarEstado();
-agregarResetBtn();
+    // RESET / inicio limpio
+    if(window.location.hash==="#reset") { localStorage.removeItem('malla-turismo'); }
 
-</script>
+    // --- INICIO ---
+    renderMalla();
+  </script>
 </body>
 </html>
